@@ -23,7 +23,7 @@ async function uploadToS3Bucket(stream, credential, cd) {
         });
         let uploadItem = await s3.upload({
             Bucket: credential.Bucket,
-            Key: '888888',// name for the bucket file
+            Key: 'image',// name for the bucket file
             ContentType: document.getElementById("fileToUpload").files[0].type,
             Body: stream
         }).on("httpUploadProgress", function (progress) {
@@ -46,19 +46,20 @@ function getUploadingProgress(uploadSize, totalSize) {
 
 async function uploadMedia() {
     let credentialRequest = {
-        accressKeyId: '',
-        secretAccessKey: '',
+        accressKeyId: 'AKIAUAPVIIGBWHOEJ7NB',
+        secretAccessKey: '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',
         signatureVersion: 'v4',
         region: 'us-east-1',
-        Bucket: 'large-files-0'
+        Bucket: 'image-upload-squardbucket'
     };
-    let mediaStreamRequest = getFile(document.getElementById("fileToUpload").files[0])
+    let mediaStreamRequest = getFile(document.getElementById("fileToUpload").files[0]);
     const [mediaStream] = await Promise.all([
         mediaStreamRequest
     ])
     await uploadToS3Bucket(mediaStream, credentialRequest, (progress) => {
         console.log(progress)
     })
+
 }
 
 async function getFile(file) {
@@ -75,80 +76,3 @@ async function getFile(file) {
 };
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-async function fetchPostAsyncAwaitMethod(argument) {
-    try {
-        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
-        const res = await response.json();
-        console.log(res, "post fetch")
-        if (response.status === 200) {
-            const response = await fetch(`https://jsonplasceholder.typicode.com/comments?postId=${res[0].id}`);
-            const resCon = await response.json();
-            console.log(resCon, "comment fetch")
-        }
-    } catch (error) {
-        console.log(error)
-    }
-
-}
-
-function fetchPostDotThenMethod(argument) {
-    fetch('https://jsonplaceholder.typicode.com/posts')
-        .then((res) => res.json())
-        .then(res => {
-            console.log(res, 'post fetch')
-            if (res.length > 0) {
-                fetch(`https://jsonplaceholder.typeicode.com/comments?postId=${res[0].id}`)
-                    .then((res) => res.json())
-                    .then(res => {
-                        console.log(res, 'comment fetch')
-                    })
-                    .catch(error => {
-                        console.log(error)
-                    })
-            }
-        }).catch(error => {
-            console.log(error)
-        })
-}
-
-function fetchPostCallBackMethod() {
-    function fetchPostComment(id) {
-        fetch(`https://jsonplaceholder.typicode.com/comments?postId=${id}`)
-            .then((res) => res.json())
-            .then(res => {
-                console.log(res, 'fetchPostComment')
-            }).catch(error => {
-                console.log(error)
-            })
-    }
-
-    function fetchPost(callback) {
-        fetch('https://jsonplaceholder.typicode.com/posts')
-            .then((res) => res.json())
-            .then(res => {
-                if (res.length > 0) {
-                    console.log(res, 'fetchPost')
-                    callback(res[0].id)
-                }
-            }).catch(error => {
-                console.log(error)
-            })
-    }
-
-    fetchPost(fetchPostComment)
-}
-
-fetchPostAsyncAwaitMethod()
