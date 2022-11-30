@@ -59,6 +59,8 @@ async function uploadMedia() {
     await uploadToS3Bucket(mediaStream, credentialRequest, (progress) => {
         console.log(progress)
     })
+    alert("Image Successfully Uploaded");
+    window.location.reload();
 
 }
 
